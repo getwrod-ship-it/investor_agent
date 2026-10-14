@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "text2sql-agent"
+version = "0.2.0"
+description = "Plug-and-play Text-to-SQL agent — connect any business database and knowledge base"
+requires-python = ">=3.12"
+dependencies = [
+    # Core agent
+    "langchain>=0.3",
+    "langchain-text-splitters>=0.3",
+    "langgraph>=0.2",
+    "langgraph-checkpoint-sqlite>=2.0",
+    "langchain-deepseek>=0.1",
+    # API
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "python-multipart>=0.0.9",
+    # Databases (MySQL business DB driver + SQLite system DB)
+    "sqlmodel>=0.0.16",
+    "pymysql>=1.1",
+    "cryptography>=42.0",
+    # Vector store (>=1.10 for the query_points API)
+    "qdrant-client>=1.10",
+    # Long-term memory (facts + episodic). Locked to the 0.1.x line:
+    # 0.1.117+ pin openai<1.100 (conflicts with this project's openai 2.x/3.x
+    # stack), and the 2.x line is storage-additive (rename gate fails — old
+    # facts keep ranking first). See docs/DESIGN_long_term_memory.md §7.1.
+    "mem0ai>=0.1.116,<0.2",
+    # Evaluation / HTTP
+    "requests>=2.31",
+    # Local decision model client (StartLux-Decision /v1/systemone,
+    # docs/DESIGN_local_decision_model.md) — also backs FastAPI's TestClient.
+    "httpx>=0.27",
+    # Config
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    # SQL parsing
+    "sqlglot>=23.0",
+    # Frontend
+    "streamlit>=1.33",
+    # MCP
+    "mcp>=1.0",
+    # Local embeddings (BGE-M3) + reranker (BGE cross-encoder).
+    # torch is deliberately NOT listed here — on Windows install the CUDA
+    # build FIRST, then `pip install -e .` will see torch already present:
+    #   pip install torch --index-url https://download.pytorch.org/whl/cu124
+    "langchain-huggingface>=0.1",
+    "FlagEmbedding>=1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.3",
+    "mypy>=1.9",
+]
+
+[tool.setuptools.packages.find]
+where = ["backend"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["backend"]

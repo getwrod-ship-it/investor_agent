@@ -1,0 +1,38 @@
+# ============================================================
+# text-to-sql 子项目忽略规则（叠加在根 .gitignore 之上）
+# ============================================================
+
+# ---- 密钥 ----
+.env
+.env.local
+
+# ---- 私有设计文档（自用笔记，不入库）----
+docs/
+
+# ---- 业务数据库：仅分发建库引导文件，其余运行时数据忽略 ----
+# 引导：litemall_schema.sql / litemall_table.sql / litemall_data.sql / generate_orders.py
+# 忽略：backup_full_*.sql 全量备份、checkpoints.db 等运行时 SQLite
+data/*
+!data/litemall/
+data/litemall/*
+!data/litemall/litemall_schema.sql
+!data/litemall/litemall_table.sql
+!data/litemall/litemall_data.sql
+!data/litemall/generate_orders.py
+
+# ---- 爬虫抓取的用户原始文档不入库（源知识库在顶层 knowledge_base/）----
+backend/knowledge_base/*
+!backend/knowledge_base/.gitkeep
+
+# ---- Docker 本地覆盖 ----
+docker-compose.override.yml
+
+# ---- OS / IDE / 编辑器 ----
+.DS_Store
+.AppleDouble
+.idea/
+*.swp
+*.swo
+
+# ---- Jupyter ----
+.ipynb_checkpoints/

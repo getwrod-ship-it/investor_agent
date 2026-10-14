@@ -1,0 +1,69 @@
+# ============================================================
+# investor_agent 全局忽略规则
+# 模型权重 / 推理二进制 / 运行时数据库 / 私密文档一律不入库
+# 权重请按 README 部署步骤从 ModelScope / HuggingFace 下载
+# ============================================================
+
+# ---- 密钥与环境 ----
+.env
+.env.*
+!.env.example
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# ---- 测试 / 类型检查缓存 ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ---- 模型权重与推理二进制（GitHub 单文件 100MB 上限）----
+# 注意：锚定到具体目录，避免误伤 backend/app/models/ 源码包
+*.gguf
+*.gguf.tmp
+*.safetensors
+*.onnx
+*.onnx_data
+*.bin
+*.pt
+/text-to-sql/models/
+/startlux-decision/models/
+/startlux-decision/llama.cpp/
+
+# ---- 运行时数据与备份 ----
+data_backup_*.zip
+*.db
+*.db-shm
+*.db-wal
+logs/
+
+# ---- 私人笔记与本地工具 ----
+.zcode/
+.zcodeignore
+.git.bak/
+/bge-embed-rerank-deploy.md
+/startlux-decision-deploy.md
+
+# ---- OS / IDE ----
+.DS_Store
+.AppleDouble
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
